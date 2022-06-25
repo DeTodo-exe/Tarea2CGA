@@ -1,3 +1,4 @@
+import sys
 from PyQt5 import QtGui, QtWidgets, uic
 from OpenGL.GLUT import *
 
