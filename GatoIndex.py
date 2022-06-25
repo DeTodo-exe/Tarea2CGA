@@ -1,5 +1,5 @@
 import sys
-from PyQt5 import QtGui, QtWidgets, uic
+from PyQt5 import QtGui, QtCore, QtWidgets, uic
 from OpenGL.GLUT import *
 
 from Viewer3DWidget import *
@@ -17,8 +17,15 @@ class Ventana(QtWidgets.QMainWindow):
         self.ui.show()
 
         # variables
-
         self._cambiarsymbol = "x"
+
+        self.curr_time = QtCore.QTime(00,00,00)
+
+        self.timer = QtCore.QTimer()
+        self.timer.cronometro.connect(self.time)
+        self.timer.start(1000)
+
+
         # Triggers
 
 
@@ -38,6 +45,10 @@ class Ventana(QtWidgets.QMainWindow):
 
     def cSO(self):
         self._cambiarsymbol = "o"
+
+    def chronometer(self):
+        self.curr_time = self.curr_time.addSecs()
+        self.upTime.setTime(self.curr_time)
 
 
 if __name__ == "__main__":
