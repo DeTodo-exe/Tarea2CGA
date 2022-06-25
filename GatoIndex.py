@@ -1,6 +1,10 @@
 import sys
-from PyQt5 import QtGui, QtCore, QtWidgets, QTimer, QDateTime, uic
+from PyQt5 import QtGui, QtWidgets, uic
+from PyQt5.QtCore import QTime, QTimer
+from PyQt5.QtWidgets import *
 from OpenGL.GLUT import *
+
+import datetime, time
 
 from Viewer3DWidget import *
 
@@ -19,12 +23,12 @@ class Ventana(QtWidgets.QMainWindow):
         # variables
         self._cambiarsymbol = "x"
 
-        self.curr_time = QtCore.QTime(00,00,00)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.timeUpdater)
 
-        self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.time)
         self.timer.start(1000)
 
+        self.timeUpdater()
 
         # Triggers
 
@@ -33,8 +37,6 @@ class Ventana(QtWidgets.QMainWindow):
 
         self.ui.rBX.toggled.connect(self.cSX)
         self.ui.rBO.toggled.connect(self.cSO)
-
-
 
 
     def changeSymbol(self):
@@ -46,9 +48,16 @@ class Ventana(QtWidgets.QMainWindow):
     def cSO(self):
         self._cambiarsymbol = "o"
 
-    def chronometer(self):
-        self.curr_time = self.curr_time.addSecs()
-        self.upTime.setTime(self.curr_time)
+    def timeUpdater(self):
+        current_time = datetime.datetime.now()
+        my_time = time.time()
+        
+        definitive_time = current_time - my_time
+
+        put_time = definitive_time.strftime("%S")
+
+        self.ui.cronometro_1.display(put_time)
+
 
 
 if __name__ == "__main__":

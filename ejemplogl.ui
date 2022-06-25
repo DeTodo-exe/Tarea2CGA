@@ -70,7 +70,7 @@
      <string>Confirm</string>
     </property>
    </widget>
-   <widget class="QLCDNumber" name="cronometro">
+   <widget class="QLCDNumber" name="cronometro_1">
     <property name="geometry">
      <rect>
       <x>570</x>
