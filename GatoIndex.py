@@ -1,5 +1,5 @@
 import sys
-from PyQt5 import QtGui, QtCore, QtWidgets, uic
+from PyQt5 import QtGui, QtCore, QtWidgets, QTimer, QDateTime, uic
 from OpenGL.GLUT import *
 
 from Viewer3DWidget import *
@@ -22,7 +22,7 @@ class Ventana(QtWidgets.QMainWindow):
         self.curr_time = QtCore.QTime(00,00,00)
 
         self.timer = QtCore.QTimer()
-        self.timer.cronometro.connect(self.time)
+        self.timer.timeout.connect(self.time)
         self.timer.start(1000)
 
 
