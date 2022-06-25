@@ -19,7 +19,6 @@ class Ventana(QtWidgets.QMainWindow):
 
         self._cambiarsymbol = "x"
         # Triggers
-        x = "hola"
 
         self.ui.confirm.clicked.connect(self.changeSymbol)
 

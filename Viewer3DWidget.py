@@ -179,15 +179,11 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
     def whoWins(self):
         for _l in range(2):
             for _j in self.verifiercolum:
-                if _j[0] == _j[1] == _j[2] == [1, 'x']:
-                    return self.callwin()
-                if _j[0] == _j[1] == _j[2] == [1, 'o']:
+                if _j[0] == _j[1] == _j[2] == [1, 'x'] or _j[0] == _j[1] == _j[2] == [1, 'o']:
                     return self.callwin()
 
         for _i in self.verifier:
-            if _i[0] == _i[1] == _i[2] == [1, 'x']:
-                return self.callwin()
-            elif _i[0] == _i[1] == _i[2] == [1, 'o']:
+            if _i[0] == _i[1] == _i[2] == [1, 'x'] or _i[0] == _i[1] == _i[2] == [1, 'o']:
                 return self.callwin()
 
         if self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'x'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'x']:
