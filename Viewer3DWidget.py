@@ -3,6 +3,7 @@ from PyQt5 import QtOpenGL
 from OpenGL.GL import *
 from PyQt5.QtWidgets import QMessageBox
 from math import *
+from random import *
 
 
 def symbol(_s, _coords, _v):
@@ -66,7 +67,14 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         QtOpenGL.QGLWidget.__init__(self, parent)
         self.verifiercolum = list()
         self.current_turn = True # Si es verdad sera turno del jugador
+
+        # Simbolos 
+
         self.Symbol = "x"
+        self.iASymbol = "o" if self.Symbol == "x" else "x"
+
+        # Coords
+
         self.x = 0
         self.y = 0
         self.n = 2 / 3
@@ -155,23 +163,22 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
                             self.verifier[i][j] = [1, self.Symbol]
                         """
 
-    def iAResponce(self, evento):
-        if evento.key() == Qt.Key_Space:
-            for i in range(len(self.coords)):
-                for j in range(len(self.coords)):
-                    if (self.x, self.y) == self.coords[i][j] and self.verifier[i][j][1] == "" and self.current_turn == False:
+    def iAResponce(self):
+        for i in range(randint(0, len(self.coords))):
+            for j in range(randint(0, len(self.coords))):
+                if self.verifier[i][j][1] == "" and self.current_turn == False:
+                    self.verifier[i][j] = [1, self.iASymbol]
+                    self.verifiercolum = [self.verifier[j][i] for i in range(len(self.verifier)) for j in
+                                          range(len(self.verifier))]
+                    self.verifiercolum = upgradeVerifier2Colum(self.verifiercolum)
+                    self.current_turn = True
+                    self.whoWins()
+                    """
+                    if self.verifier[i][j][0]:
+                        self.verifier[i][j] = [0, self.Symbol]
+                    else:
                         self.verifier[i][j] = [1, self.Symbol]
-                        self.verifiercolum = [self.verifier[j][i] for i in range(len(self.verifier)) for j in
-                                              range(len(self.verifier))]
-                        self.verifiercolum = upgradeVerifier2Colum(self.verifiercolum)
-                        self.current_turn = False
-                        self.whoWins()
-                        """
-                        if self.verifier[i][j][0]:
-                            self.verifier[i][j] = [0, self.Symbol]
-                        else:
-                            self.verifier[i][j] = [1, self.Symbol]
-                        """
+                    """
 
     def keyPressEvent(self, evento):
         # Función que permite identificar algún botón (arriba, abajo, izquierda, derecha, espacio)
@@ -180,7 +187,7 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.moveUp(evento)
         self.moveDown(evento)
         self.placeFigure(evento)
-        self.iAResponce(evento)
+        self.iAResponce()
         self.playerPos()
         self.updateGL()
 
