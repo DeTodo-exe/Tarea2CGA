@@ -24,13 +24,6 @@ class Ventana(QtWidgets.QMainWindow):
 
         # variables
         self._cambiarsymbol = "x"
-
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.timeUpdater)
-
-        self.timer.start(1000)
-
-        self.timeUpdater()
         #music timer
         self.url = QtCore.QUrl.fromLocalFile(self.song)
         self.content = QMediaContent(self.url)
@@ -59,13 +52,6 @@ class Ventana(QtWidgets.QMainWindow):
     def cSO(self):
         self._cambiarsymbol = "o"
 
-    def timeUpdater(self):
-        current_time = datetime.datetime.now()
-
-        put_time = current_time.strftime("%S")
-
-        self.ui.cronometro_1.display(put_time)
-
     def playAudioFile(self):
         full_file_path = os.path.join(os.getcwd(), self.song)
         url = QUrl.fromLocalFile(full_file_path)
@@ -82,6 +68,7 @@ class Ventana(QtWidgets.QMainWindow):
             self.player.setMedia(self.content)
             self.player.play()
             self.time = QtCore.QTime(0, 0, 0)
+        self.ui.cronometro_2.display(self.time.toString("mm:ss"))
 
 
 if __name__ == "__main__":
