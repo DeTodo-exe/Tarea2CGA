@@ -50,11 +50,8 @@ class Ventana(QtWidgets.QMainWindow):
 
     def timeUpdater(self):
         current_time = datetime.datetime.now()
-        my_time = time.time()
-        
-        definitive_time = current_time - my_time
 
-        put_time = definitive_time.strftime("%S")
+        put_time = current_time.strftime("%S")
 
         self.ui.cronometro_1.display(put_time)
 
