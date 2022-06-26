@@ -20,6 +20,7 @@ class Ventana(QtWidgets.QMainWindow):
         self.viewer3D = Viewer3DWidget(self)
         self.ui.OpenGLLayout.addWidget(self.viewer3D)
         self.ui.show()
+        self.song = 'videoplayback.mpeg'
 
         # variables
         self._cambiarsymbol = "x"
@@ -31,7 +32,7 @@ class Ventana(QtWidgets.QMainWindow):
 
         self.timeUpdater()
         #music timer
-        self.url = QtCore.QUrl.fromLocalFile('videoplayback.mp3')
+        self.url = QtCore.QUrl.fromLocalFile(self.song)
         self.content = QMediaContent(self.url)
         self.player = QMediaPlayer()
         self.player.setMedia(self.content)
@@ -66,7 +67,7 @@ class Ventana(QtWidgets.QMainWindow):
         self.ui.cronometro_1.display(put_time)
 
     def playAudioFile(self):
-        full_file_path = os.path.join(os.getcwd(), 'videoplayback.mp3')
+        full_file_path = os.path.join(os.getcwd(), self.song)
         url = QUrl.fromLocalFile(full_file_path)
         content = QMediaContent(url)
         self.player.setMedia(content)
@@ -75,7 +76,7 @@ class Ventana(QtWidgets.QMainWindow):
     def timerEvent(self):
         self.time = self.time.addSecs(1)
         if (self.time.toString("mm:ss") == "01:33"):
-            self.url = QtCore.QUrl.fromLocalFile('videoplayback.mp3')
+            self.url = QtCore.QUrl.fromLocalFile(self.song)
             self.content = QMediaContent(self.url)
             self.player = QMediaPlayer()
             self.player.setMedia(self.content)
