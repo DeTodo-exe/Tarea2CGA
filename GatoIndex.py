@@ -42,7 +42,6 @@ class Ventana(QtWidgets.QMainWindow):
         self.ui.rBX.toggled.connect(self.cSX)
         self.ui.rBO.toggled.connect(self.cSO)
 
-
     def changeSymbol(self):
         self.viewer3D.Symbol = self._cambiarsymbol
 
@@ -67,7 +66,6 @@ class Ventana(QtWidgets.QMainWindow):
             self.player = QMediaPlayer()
             self.player.setMedia(self.content)
             self.player.play()
-            self.time = QtCore.QTime(0, 0, 0)
         self.ui.cronometro_2.display(self.time.toString("mm:ss"))
 
 

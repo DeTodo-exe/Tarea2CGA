@@ -65,6 +65,7 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
     def __init__(self, _symbol, parent=None):
         QtOpenGL.QGLWidget.__init__(self, parent)
         self.verifiercolum = list()
+        self.current_turn = True # Si es verdad sera turno del jugador
         self.Symbol = "x"
         self.x = 0
         self.y = 0
@@ -140,11 +141,30 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         if evento.key() == Qt.Key_Space:
             for i in range(len(self.coords)):
                 for j in range(len(self.coords)):
-                    if (self.x, self.y) == self.coords[i][j] and self.verifier[i][j][1] == "":
+                    if (self.x, self.y) == self.coords[i][j] and self.verifier[i][j][1] == "" and self.current_turn:
                         self.verifier[i][j] = [1, self.Symbol]
                         self.verifiercolum = [self.verifier[j][i] for i in range(len(self.verifier)) for j in
                                               range(len(self.verifier))]
                         self.verifiercolum = upgradeVerifier2Colum(self.verifiercolum)
+                        self.current_turn = False
+                        self.whoWins()
+                        """
+                        if self.verifier[i][j][0]:
+                            self.verifier[i][j] = [0, self.Symbol]
+                        else:
+                            self.verifier[i][j] = [1, self.Symbol]
+                        """
+
+    def iAResponce(self, evento):
+        if evento.key() == Qt.Key_Space:
+            for i in range(len(self.coords)):
+                for j in range(len(self.coords)):
+                    if (self.x, self.y) == self.coords[i][j] and self.verifier[i][j][1] == "" and self.current_turn == False:
+                        self.verifier[i][j] = [1, self.Symbol]
+                        self.verifiercolum = [self.verifier[j][i] for i in range(len(self.verifier)) for j in
+                                              range(len(self.verifier))]
+                        self.verifiercolum = upgradeVerifier2Colum(self.verifiercolum)
+                        self.current_turn = False
                         self.whoWins()
                         """
                         if self.verifier[i][j][0]:
@@ -160,6 +180,7 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.moveUp(evento)
         self.moveDown(evento)
         self.placeFigure(evento)
+        self.iAResponce(evento)
         self.playerPos()
         self.updateGL()
 
