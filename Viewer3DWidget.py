@@ -192,23 +192,24 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.playerPos()
         self.updateGL()
 
-    def displayWin(self, strMsg, title="Victory", setext="You Win!"):
+    def displayWin(self, strMsg, title="End of the game", setext="Someone Win!"):
         self.msg.setText(setext)
         self.msg.setWindowTitle(title)
         self.msg.setInformativeText(strMsg)
         self.msg.exec()
     
-    def displaydraw(self, strMsg, title="DRAW", setext="DRAW"):
+    def displaydraw(self, strMsg, title="DRAW", setext="upps..."):
         self.msg.setText(setext)
         self.msg.setWindowTitle(title)
         self.msg.setInformativeText(strMsg)
         self.msg.exec()
 
-    def callwin(self):
-        if self.Symbol == "x":
-            self.displayWin("Ganador juagor X")
-        elif self.Symbol == "o":
-            self.displayWin("Ganador jugador O")
+    def callwinplayer(self):
+        self.displayWin("A Ganado el Jugador")
+        self.Refresh()
+
+    def callwinsystem(self):
+        self.displayWin("A Ganado el Sistema")
         self.Refresh()
     
     def calldraw(self):
@@ -216,19 +217,39 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.Refresh()
 
     def whoWins(self):
-        for _l in range(2):
-            for _j in self.verifiercolum:
-                if _j[0] == _j[1] == _j[2] == [1, 'x'] or _j[0] == _j[1] == _j[2] == [1, 'o']:
-                    return self.callwin()
+        if self.Symbol == "x":
+            for _l in range(2):
+                for _j in self.verifiercolum:
+                    if _j[0] == _j[1] == _j[2] == [1, 'x']:
+                        return self.callwinplayer()
+                    elif _j[0] == _j[1] == _j[2] == [1, 'o']:
+                        return self.callwinsystem()
+            for _i in self.verifier:
+                if _i[0] == _i[1] == _i[2] == [1, 'x']:
+                    return self.callwinplayer()
+                elif _i[0] == _i[1] == _i[2] == [1, 'o']:
+                    return self.callwinsystem()
+            if self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'x'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'x']:
+                return self.callwinplayer()
+            elif  self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'o'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'o']:
+                return self.callwinsystem()
 
-        for _i in self.verifier:
-            if _i[0] == _i[1] == _i[2] == [1, 'x'] or _i[0] == _i[1] == _i[2] == [1, 'o']:
-                return self.callwin()
-
-        if self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'x'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'x']:
-            return self.callwin()
-        elif  self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'o'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'o']:
-            return self.callwin()
+        if self.Symbol == "o":
+            for _l in range(2):
+                for _j in self.verifiercolum:
+                    if _j[0] == _j[1] == _j[2] == [1, 'x']:
+                        return self.callwinsystem()
+                    elif _j[0] == _j[1] == _j[2] == [1, 'o']:
+                        return self.callwinplayer()
+            for _i in self.verifier:
+                if _i[0] == _i[1] == _i[2] == [1, 'x']:
+                    return self.callwinsystem()
+                elif _i[0] == _i[1] == _i[2] == [1, 'o']:
+                    return self.callwinplayer()
+            if self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'x'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'x']:
+                return self.callwinsystem()
+            elif  self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'o'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'o']:
+                return self.callwinplayer()
         
         if self.verifier[0][0][0] and self.verifier[0][1][0] and self.verifier[0][2][0] and self.verifier[1][0][0] and self.verifier[1][1][0] and self.verifier[1][2][0] and self.verifier[2][0][0] and self.verifier[2][1][0] and self.verifier[2][2][0]:
             return self.calldraw()
