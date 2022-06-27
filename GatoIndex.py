@@ -44,6 +44,7 @@ class Ventana(QtWidgets.QMainWindow):
 
     def changeSymbol(self):
         self.viewer3D.Symbol = self._cambiarsymbol
+        self.viewer3D.iASymbol = "o" if self._cambiarsymbol == "x" else "x"
 
     def cSX(self):
         self._cambiarsymbol = "x"

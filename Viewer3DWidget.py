@@ -71,7 +71,7 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         # Simbolos 
 
         self.Symbol = "x"
-        self.iASymbol = "o" if self.Symbol == "x" else "x"
+        self.iASymbol = "o"
 
         # Coords
 
@@ -111,6 +111,7 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.verifier = [[[0, ""], [0, ""], [0, ""]],
                          [[0, ""], [0, ""], [0, ""]],
                          [[0, ""], [0, ""], [0, ""]]]
+        self.current_turn = True
 
     def resizeGL(self, widthInPixels, heightInPixels):
         glViewport(0, 0, widthInPixels, heightInPixels)
@@ -196,12 +197,22 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.msg.setWindowTitle(title)
         self.msg.setInformativeText(strMsg)
         self.msg.exec()
+    
+    def displaydraw(self, strMsg, title="DRAW", setext="DRAW"):
+        self.msg.setText(setext)
+        self.msg.setWindowTitle(title)
+        self.msg.setInformativeText(strMsg)
+        self.msg.exec()
 
     def callwin(self):
         if self.Symbol == "x":
             self.displayWin("Ganador juagor X")
         elif self.Symbol == "o":
             self.displayWin("Ganador jugador O")
+        self.Refresh()
+    
+    def calldraw(self):
+        self.displaydraw("Empate")
         self.Refresh()
 
     def whoWins(self):
@@ -218,3 +229,6 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
             return self.callwin()
         elif  self.verifier[0][0] == self.verifier[1][1] == self.verifier[2][2] == [1, 'o'] or self.verifier[0][2] == self.verifier[1][1] == self.verifier[2][0] == [1, 'o']:
             return self.callwin()
+        
+        if self.verifier[0][0][0] and self.verifier[0][1][0] and self.verifier[0][2][0] and self.verifier[1][0][0] and self.verifier[1][1][0] and self.verifier[1][2][0] and self.verifier[2][0][0] and self.verifier[2][1][0] and self.verifier[2][2][0]:
+            return self.calldraw()
