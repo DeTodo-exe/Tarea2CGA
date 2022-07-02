@@ -6,7 +6,7 @@ from math import *
 from random import *
 
 
-def symbol(_s, _coords, _v):
+def symbol(_s, _coords, _v): # Figuras x y circulo
     if _s == "x" and _v:
         glColor3fv([1, 1, 1])
         glBegin(GL_LINES)
@@ -25,7 +25,7 @@ def symbol(_s, _coords, _v):
         glEnd()
 
 
-def grid():
+def grid(): # Grid para el juego
     glColor3fv([1, 1, 1])
     glBegin(GL_LINES)
     glVertex2f(-1, 1 / 3)
@@ -50,7 +50,7 @@ def grid():
 
 # Ventana clase OpenGL
 
-def upgradeVerifier2Colum(_m):
+def upgradeVerifier2Colum(_m): # Se manipula matriz verifier para que sea guardada como transpuesta
     a, b, c = [], [], []
     for i in range(len(_m)):
         if i <= 2:
@@ -83,31 +83,34 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.coords = [[(-self.n, self.n), (0, self.n), (self.n, self.n)],
                        [(-self.n, 0), (0, 0), (self.n, 0)],
                        [(-self.n, -self.n), (0, -self.n), (self.n, -self.n)]]
+        
+        # Segun el caso se utilizan las coords de abajo para evitar errores en la colision de la figura
 
         self.coordsx = [self.coords[i][j] for i in range(len(self.coords)) for j in range(len(self.coords))]
         self.coordsy = [self.coords[j][i] for i in range(len(self.coords)) for j in range(len(self.coords))]
         self.setFocusPolicy(Qt.StrongFocus)
 
+        # La matriz verifier (muy importante)
         self.verifier = [[[0, ""], [0, ""], [0, ""]],
                          [[0, ""], [0, ""], [0, ""]],
                          [[0, ""], [0, ""], [0, ""]]]
         # Corresponde a los mensajes
         self.msg = QMessageBox()
 
-    def paintGL(self):
+    def paintGL(self): # Se dibujan todas las figuras y entidades
         glLoadIdentity()
         glMatrixMode(GL_MODELVIEW)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glEnable(GL_DEPTH_TEST)
         for i in range(len(self.coords)):
             for j in range(len(self.coords)):
-                if self.verifier[i][j]:
+                if self.verifier[i][j]: # Dependiendo del valor de verifier se instancia un symbol
                     symbol(self.verifier[i][j][1], self.coords[i][j], self.verifier[i][j][0])
         grid()
         self.playerPos()
         glFlush()
 
-    def Refresh(self):
+    def Refresh(self): # Se resetea el panel principal
         self.verifier = [[[0, ""], [0, ""], [0, ""]],
                          [[0, ""], [0, ""], [0, ""]],
                          [[0, ""], [0, ""], [0, ""]]]
@@ -120,7 +123,7 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClearDepth(1.0)
 
-    def playerPos(self):
+    def playerPos(self): # La figura del jugador que se traslada segun la posicion dinamica que se modifica con keylogs
         glColor3fv([0.25, 0.25, 0.25])
 
         glBegin(GL_POLYGON)
@@ -130,6 +133,8 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         glVertex2f(1 / 3 + self.x, 1 / 3 + self.y)
         glEnd()
 
+    # Keylogs (por separado para mejor manejo de estas)
+    # Cada condicional es la tecla + la colision.
     def moveRight(self, evento):
         if evento.key() == Qt.Key_Right and (self.x + self.n, self.y) in self.coordsx:
             self.x += self.n
@@ -146,7 +151,7 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         if evento.key() == Qt.Key_Down and (self.x, self.y - self.n) in self.coordsy:
             self.y -= self.n
 
-    def placeFigure(self, evento):
+    def placeFigure(self, evento): # Agregar la figura modificando matriz verifier.
         if evento.key() == Qt.Key_Space:
             for i in range(len(self.coords)):
                 for j in range(len(self.coords)):
@@ -157,14 +162,8 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
                         self.verifiercolum = upgradeVerifier2Colum(self.verifiercolum)
                         self.current_turn = False
                         self.whoWins()
-                        """
-                        if self.verifier[i][j][0]:
-                            self.verifier[i][j] = [0, self.Symbol]
-                        else:
-                            self.verifier[i][j] = [1, self.Symbol]
-                        """
 
-    def iAResponce(self):
+    def iAResponce(self): # Respuesta aleatoria al movimiento del jugador modificando matriz verifier.
         for i in range(randint(0, len(self.coords))):
             for j in range(randint(0, len(self.coords))):
                 if self.verifier[i][j][1] == "" and self.current_turn == False:
@@ -174,15 +173,8 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
                     self.verifiercolum = upgradeVerifier2Colum(self.verifiercolum)
                     self.current_turn = True
                     self.whoWins()
-                    """
-                    if self.verifier[i][j][0]:
-                        self.verifier[i][j] = [0, self.Symbol]
-                    else:
-                        self.verifier[i][j] = [1, self.Symbol]
-                    """
 
-    def keyPressEvent(self, evento):
-        # Función que permite identificar algún botón (arriba, abajo, izquierda, derecha, espacio)
+    def keyPressEvent(self, evento): # Se compilan los keylogs junto con las respuestas.
         self.moveRight(evento)
         self.moveLeft(evento)
         self.moveUp(evento)
@@ -191,6 +183,8 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
         self.iAResponce()
         self.playerPos()
         self.updateGL()
+
+    # Funciones de msg box
 
     def displayWin(self, strMsg, title="End of the game", setext="Someone Win!"):
         self.msg.setText(setext)
@@ -215,6 +209,8 @@ class Viewer3DWidget(QtOpenGL.QGLWidget):
     def calldraw(self):
         self.displaydraw("Empate")
         self.Refresh()
+
+    # Funcion para detectar quien gana o si es empate
 
     def whoWins(self):
         if self.Symbol == "x":
