@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import *
 from OpenGL.GLUT import *
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5 import QtCore
-import datetime, time # Para bucles de tiempo
 
 from Viewer3DWidget import *
 
@@ -30,6 +29,7 @@ class Ventana(QtWidgets.QMainWindow):
         self.player = QMediaPlayer()
         self.player.setMedia(self.content)
         self.player.play()
+        
         self.timer2 = QTimer()
         self.time = QtCore.QTime(0, 0, 0)
         self.timer2.timeout.connect(self.timerEvent)
