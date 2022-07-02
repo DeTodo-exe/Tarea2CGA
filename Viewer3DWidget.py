@@ -8,7 +8,7 @@ from random import *
 
 def symbol(_s, _coords, _v): # Figuras x y circulo
     if _s == "x" and _v:
-        glColor3fv([1, 1, 1])
+        glColor3fv([0, 0.5, 1])
         glBegin(GL_LINES)
         glVertex2f(-1 / 3 + _coords[0], 1 / 3 + _coords[1])
         glVertex2f(1 / 3 + _coords[0], -1 / 3 + _coords[1])
@@ -16,7 +16,7 @@ def symbol(_s, _coords, _v): # Figuras x y circulo
         glVertex2f(1 / 3 + _coords[0], 1 / 3 + _coords[1])
         glEnd()
     elif _s == "o" and _v:
-        glColor3fv([1, 1, 1])
+        glColor3fv([1, 0.5, 0])
         glBegin(GL_LINE_LOOP)
         n = 100
         for i in range(n):
